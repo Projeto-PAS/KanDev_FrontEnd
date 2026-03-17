@@ -2,7 +2,7 @@ import "../styles/home.css";
 
 export default function Home({ navigate }) {
   return (
-    <>
+    <div className="page-home">
       <header>
         <div className="hero-container">
           <h1>KanDev</h1>
@@ -24,10 +24,7 @@ export default function Home({ navigate }) {
         <div className="grid">
           <div className="card">
             <h3>Colunas prontas</h3>
-            <p>
-              Fluxo simples de organização de
-              tarefas.
-            </p>
+            <p>Fluxo simples de organização de tarefas.</p>
           </div>
           <div className="card">
             <h3>Fácil e rápido</h3>
@@ -43,23 +40,15 @@ export default function Home({ navigate }) {
       <footer>
         <p>
           &copy; 2026 -{" "}
-          <a
-            href="https://github.com/clebermarcolino"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://github.com/clebermarcolino" target="_blank" rel="noreferrer">
             Cleber
           </a>{" "}
           e{" "}
-          <a
-            href="https://github.com/carloshgalves"
-            target="_blank"
-            rel="noreferrer"
-          >
+          <a href="https://github.com/carloshgalves" target="_blank" rel="noreferrer">
             Carlos
           </a>
         </p>
       </footer>
-    </>
+    </div>
   );
 }

@@ -19,12 +19,12 @@ export default function Cadastro({ navigate }) {
       alert("As senhas não coincidem!");
       return;
     }
-    // Lógica de cadastro aqui
+    
     navigate("login");
   };
 
   return (
-    <div className="cadastro-page">
+    <div className="page-cadastro">
       <div className="container">
         <div className="logo">
           <h1>KanDev</h1>

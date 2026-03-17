@@ -59,7 +59,7 @@ export default function Kandev({ navigate }) {
   };
 
   return (
-    <div className="kandev-page">
+    <div className="page-kandev">
       <header>
         <div className="logo">KanDev</div>
         <div className="header-acoes">

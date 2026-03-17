@@ -10,12 +10,11 @@ export default function Login({ navigate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica de autenticação aqui
     navigate("kandev");
   };
 
   return (
-    <div className="login-page">
+    <div className="page-login">
       <div className="background"></div>
 
       <div className="container">
@@ -54,7 +53,9 @@ export default function Login({ navigate }) {
           </div>
 
           <div className="senha">
-            <a href="#">Esqueceu a senha?</a>
+            <button className="link-btn" onClick={() => navigate("esquece-senha")}>
+            Esqueceu a senha?
+            </button>
           </div>
 
           <button type="submit" className="btn-login">
