@@ -49,7 +49,7 @@
   margin-bottom: 4px;
 }
 
-.page-cadastro label {
+.page-cadastro .form-grupo label {
   display: block;
   margin-bottom: 0.7rem;
   color: #94a3b8;

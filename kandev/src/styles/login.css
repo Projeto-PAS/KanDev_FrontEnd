@@ -46,23 +46,22 @@
 }
 
 .page-login .form-grupo {
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   position: relative;
-  
 }
 
-.page-login label {
+.page-login .form-grupo label {
   display: block;
-  margin-bottom: 2.0rem;
-  color: #94a3b8;
+  margin-bottom: 1.0rem;
+  color: rgba(134, 58, 134, 0.918);
   font-size: 0.90rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
-.page-login input {
+.page-login .form-grupo input {
   width: 100%;
   padding: 0.9rem 1.1rem;
-  background-color: rgba(236, 238, 238, 0.445);
+  background-color: rgba(179, 178, 178, 0.144);
   border: 1px solid rgba(120, 80, 220, 0.3);
   border-radius: 8px;
   color: #1f2937;
@@ -102,9 +101,10 @@
 }
 
 .page-login .btn-login {
-  width: 100%;
+  width: 80%;
+  display: block;
   padding: 1.20rem;
-  margin-top: 1.5rem;
+  margin: 1.1rem auto 0;
   background: linear-gradient(90deg, #6366F1, #6a0dadc2);
   background-size: 200% 100%;
   border: none;

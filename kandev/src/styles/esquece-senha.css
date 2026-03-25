@@ -51,33 +51,26 @@
 }
 
 .page-esquece-senha .titulo-area h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #1f2937;
-  margin-bottom: 0.4rem;
-}
-
-.page-esquece-senha .titulo-area p {
-  font-size: 0.95rem;
-  color: #94a3b8;
+  font-size: 1.0rem;
+  color: #8c8ee9
 }
 
 .page-esquece-senha .form-grupo {
   margin-bottom: 10px;
 }
 
-.page-esquece-senha label {
+.page-esquece-senha .form-grupo label {
   display: block;
-  margin-bottom: 0.7rem;
-  color: #94a3b8;
+  margin-bottom: 1.0rem;
+  color: rgba(134, 58, 134, 0.918);
   font-size: 0.90rem;
-  font-weight: 400;
+  font-weight: 600;
 }
 
-.page-esquece-senha input {
+.page-esquece-senha .form-grupo input {
   width: 100%;
   padding: 0.9rem 1.1rem;
-  background-color: rgba(236, 238, 238, 0.445);
+  background-color: rgba(179, 178, 178, 0.144);
   border: 1px solid rgba(120, 80, 220, 0.3);
   border-radius: 8px;
   color: #1f2937;
@@ -96,9 +89,10 @@
 }
 
 .page-esquece-senha .btn-redefinir {
-  width: 100%;
+  width: 80%;
+  display: block;
   padding: 1.20rem;
-  margin-top: 1.5rem;
+  margin: 1.1rem auto 0;
   background: linear-gradient(90deg, #6366F1, #6a0dadc2);
   background-size: 200% 100%;
   border: none;

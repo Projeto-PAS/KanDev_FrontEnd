@@ -20,7 +20,7 @@ export default function Login({ navigate }) {
 
       <div className="container">
         <div className="logo-area">
-          <div className="logo">
+          <div className="logo" onClick={() => navigate("home")}>
             <h1>KanDev</h1>
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function Login({ navigate }) {
             <input
               type="email"
               id="email"
-              placeholder="Digite seu email"
+              placeholder={"\u{1F582} Digite seu email"}
               autoComplete="off"
               value={form.email}
               onChange={handleChange}
@@ -44,7 +44,7 @@ export default function Login({ navigate }) {
               <input
                 type="password"
                 id="senha"
-                placeholder="Digite sua senha"
+                placeholder={"\u{1F512} Digite sua senha"}
                 value={form.senha}
                 onChange={handleChange}
               />

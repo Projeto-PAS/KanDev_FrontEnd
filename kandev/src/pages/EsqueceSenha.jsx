@@ -30,8 +30,7 @@ export default function EsqueceSenha({ navigate }) {
         </div>
 
         <div className="titulo-area">
-          <h2>Redefinir senha</h2>
-          <p>Informe seu email e escolha uma nova senha.</p>
+          <h2>Informe seu email e escolha uma nova senha</h2>
         </div>
 
         <form onSubmit={handleSubmit}>
@@ -40,7 +39,7 @@ export default function EsqueceSenha({ navigate }) {
             <input
               type="email"
               id="email"
-              placeholder="Digite seu email"
+              placeholder={"\u{1F582} Digite seu email"}
               required
               value={form.email}
               onChange={handleChange}
@@ -52,7 +51,7 @@ export default function EsqueceSenha({ navigate }) {
             <input
               type="password"
               id="novaSenha"
-              placeholder="Digite a nova senha"
+              placeholder={"\u{1F512} Digite sua senha"}
               required
               value={form.novaSenha}
               onChange={handleChange}
@@ -64,7 +63,7 @@ export default function EsqueceSenha({ navigate }) {
             <input
               type="password"
               id="confirmarSenha"
-              placeholder="Digite novamente a nova senha"
+              placeholder={"\u{1F512} Digite sua senha"}
               required
               value={form.confirmarSenha}
               onChange={handleChange}
