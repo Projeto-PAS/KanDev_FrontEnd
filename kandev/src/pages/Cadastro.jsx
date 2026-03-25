@@ -9,17 +9,50 @@ export default function Cadastro({ navigate }) {
     confirmarSenha: "",
   });
 
+  const [erros, setErros] = useState({});
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.id]: e.target.value });
+    setErros({ ...erros, [e.target.id]: "" });
+  };
+
+  const validar = () => {
+    const novosErros = {};
+
+    if (form.nome.trim().length < 3) {
+      novosErros.nome = "O nome deve ter pelo menos 3 caracteres.";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      novosErros.email = "Informe um email válido.";
+    }
+
+    if (form.senha.length < 6) {
+      novosErros.senha = "A senha deve ter pelo menos 6 caracteres.";
+    } else if (!/[A-Z]/.test(form.senha)) {
+      novosErros.senha = "A senha deve conter pelo menos uma letra maiúscula.";
+    } else if (!/[0-9]/.test(form.senha)) {
+      novosErros.senha = "A senha deve conter pelo menos um número.";
+    }
+
+    if (form.senha !== form.confirmarSenha) {
+      novosErros.confirmarSenha = "As senhas não coincidem.";
+    }
+
+    return novosErros;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (form.senha !== form.confirmarSenha) {
-      alert("As senhas não coincidem!");
+    const novosErros = validar();
+
+    if (Object.keys(novosErros).length > 0) {
+      setErros(novosErros);
       return;
     }
-    
+
+    alert("\u2705 Cadastro realizado!");
     navigate("login");
   };
 
@@ -37,10 +70,11 @@ export default function Cadastro({ navigate }) {
               type="text"
               id="nome"
               placeholder={"\u{1F464} Digite seu nome"}
-              required
               value={form.nome}
               onChange={handleChange}
+              className={erros.nome ? "input-erro" : ""}
             />
+            {erros.nome && <span className="mensagem-erro">{erros.nome}</span>}
           </div>
 
           <div className="form-grupo">
@@ -52,7 +86,9 @@ export default function Cadastro({ navigate }) {
               required
               value={form.email}
               onChange={handleChange}
+              className={erros.email ? "input-erro" : ""}
             />
+            {erros.email && <span className="mensagem-erro">{erros.email}</span>}
           </div>
 
           <div className="form-grupo">
@@ -64,7 +100,9 @@ export default function Cadastro({ navigate }) {
               required
               value={form.senha}
               onChange={handleChange}
+              className={erros.senha ? "input-erro" : ""}
             />
+            {erros.senha && <span className="mensagem-erro">{erros.senha}</span>}
           </div>
 
           <div className="form-grupo">
@@ -72,11 +110,13 @@ export default function Cadastro({ navigate }) {
             <input
               type="password"
               id="confirmarSenha"
-              placeholder={"\u{1F512} Digite sua nova senha novamente"}
+              placeholder={"\u{1F512} Digite sua senha novamente"}
               required
               value={form.confirmarSenha}
               onChange={handleChange}
+              className={erros.confirmarSenha ? "input-erro" : ""}
             />
+            {erros.confirmarSenha && <span className="mensagem-erro">{erros.confirmarSenha}</span>}
           </div>
 
           <button type="submit" className="btn-criar-conta">
