@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "../styles/kandev.css";
+import img_vazio from "../assets/img_vazio.jpg";
+import icon_profile from "../assets/icon_profile.png";
 
 const STATUS = ["começar", "fazendo", "concluído"];
 const LABELS = {
@@ -15,19 +17,27 @@ const EMPTY_MSG = {
 
 let nextId = 1;
 
-export default function Kandev({ navigate }) {
+export default function Kandev() {
   const [tarefas, setTarefas] = useState([]);
-  const [modalAberto, setModalAberto] = useState(false);
+
+  const [modalTarefaAberto, setModalTarefaAberto] = useState(false);
   const [novaTarefa, setNovaTarefa] = useState({ titulo: "", descricao: "", status: "começar" });
   const [editando, setEditando] = useState(null);
+  const [modalPerfilAberto, setModalPerfilAberto] = useState(false);
+  const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
 
-  const abrirModal = () => {
+  const [perfil, setPerfil] = useState({
+    nome: "Cleber Marcolino",
+    email: "cleber@exemplo.com"
+  });
+
+  const abrirModalTarefa = () => {
     setNovaTarefa({ titulo: "", descricao: "", status: "começar" });
     setEditando(null);
-    setModalAberto(true);
+    setModalTarefaAberto(true);
   };
 
-  const fecharModal = () => setModalAberto(false);
+  const fecharModalTarefa = () => setModalTarefaAberto(false);
 
   const salvarTarefa = (e) => {
     e.preventDefault();
@@ -38,36 +48,88 @@ export default function Kandev({ navigate }) {
     } else {
       setTarefas([...tarefas, { ...novaTarefa, id: nextId++ }]);
     }
-    fecharModal();
-  };
-
-  const excluirTarefa = (id) => {
-    setTarefas(tarefas.filter((t) => t.id !== id));
+    fecharModalTarefa();
   };
 
   const editarTarefa = (tarefa) => {
-    setNovaTarefa({ titulo: tarefa.titulo, descricao: tarefa.descricao, status: tarefa.status });
+    setNovaTarefa({ titulo: tarefa.titulo, descricao: tarefa.descricao || "", status: tarefa.status });
     setEditando(tarefa.id);
-    setModalAberto(true);
+    setModalTarefaAberto(true);
   };
 
-  const moverTarefa = (id, direcao) => {
-    const idx = STATUS.indexOf(tarefas.find((t) => t.id === id).status);
-    const novoIdx = idx + direcao;
-    if (novoIdx < 0 || novoIdx >= STATUS.length) return;
-    setTarefas(tarefas.map((t) => (t.id === id ? { ...t, status: STATUS[novoIdx] } : t)));
+  const excluirTarefa = (id) => {
+    if (window.confirm("Tem certeza que deseja excluir esta tarefa?")) {
+      setTarefas(tarefas.filter((t) => t.id !== id));
+    }
+  };
+
+  const abrirModalPerfil = () => {
+    setDropdownPerfilAberto(false);
+    setModalPerfilAberto(true);
+  };
+
+  const salvarPerfil = (e) => {
+    e.preventDefault();
+    setModalPerfilAberto(false);
+    alert("\u2705 Perfil atualizado com sucesso!");
+  };
+
+  const handleDragStart = (e, id) => {
+    e.dataTransfer.setData("text/plain", id.toString());
+    setTimeout(() => {
+      e.target.closest(".cartao-tarefa").classList.add("dragging");
+    }, 0);
+  };
+
+  const handleDragEnd = () => {
+    document.querySelectorAll(".cartao-tarefa").forEach(card => card.classList.remove("dragging"));
+  };
+
+  const handleDragOver = (e) => e.preventDefault();
+
+  const handleDrop = (e, novoStatus) => {
+    e.preventDefault();
+    const id = parseInt(e.dataTransfer.getData("text/plain"));
+    setTarefas(prev => prev.map(t => t.id === id ? { ...t, status: novoStatus } : t));
   };
 
   return (
     <div className="page-kandev">
       <header>
-        <div className="logo">KanDev</div>
+        <div 
+          className="logo" 
+          onClick={() => window.location.reload()}
+          title="Recarregar página"
+        >
+          KanDev
+        </div>
+
         <div className="header-acoes">
-          <button className="btn-novo" onClick={abrirModal}>
-            <span>＋</span> Nova Tarefa
+          <button className="btn-novo" onClick={abrirModalTarefa}>
+            <span></span> Nova Tarefa
           </button>
-          <div className="Perfil">
-            <div className="perfil-icone">👤</div>
+
+          <div className="perfil-container">
+            <div 
+              className="perfil-icone"
+              onClick={() => setDropdownPerfilAberto(!dropdownPerfilAberto)}
+            >
+              <img src={icon_profile} alt="Perfil" />
+            </div>
+
+            {dropdownPerfilAberto && (
+              <div className="perfil-dropdown">
+                <div className="dropdown-item" onClick={abrirModalPerfil}>
+                  Ver / Editar Perfil
+                </div>
+                <div className="dropdown-item">Configurações</div>
+                <div className="dropdown-item">Alternar Tema</div>
+                <div className="dropdown-separator"></div>
+                <div className="dropdown-item logout" onClick={() => window.location.reload()}>
+                  Sair
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </header>
@@ -76,7 +138,14 @@ export default function Kandev({ navigate }) {
         {STATUS.map((status) => {
           const cartoes = tarefas.filter((t) => t.status === status);
           return (
-            <section className="coluna" key={status} data-status={status}>
+            <section
+              className="coluna"
+              key={status}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, status)}
+              onDragEnter={(e) => e.currentTarget.classList.add("drag-over")}
+              onDragLeave={(e) => e.currentTarget.classList.remove("drag-over")}
+            >
               <div className="coluna-header">
                 <span>{LABELS[status]}</span>
                 <span className="contador">({cartoes.length})</span>
@@ -84,15 +153,17 @@ export default function Kandev({ navigate }) {
 
               <div className="cartoes-container">
                 {cartoes.map((tarefa) => (
-                  <div className="cartao-tarefa" key={tarefa.id}>
+                  <div
+                    key={tarefa.id}
+                    className="cartao-tarefa"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e, tarefa.id)}
+                    onDragEnd={handleDragEnd}
+                  >
                     <div className="titulo">{tarefa.titulo}</div>
-                    {tarefa.descricao && (
-                      <div className="descricao">{tarefa.descricao}</div>
-                    )}
+                    {tarefa.descricao && <div className="descricao">{tarefa.descricao}</div>}
                     <div className="acoes">
-                      <span title="Editar" onClick={() => editarTarefa(tarefa)}>✏️</span>
-                      <span title="Mover para trás" onClick={() => moverTarefa(tarefa.id, -1)}>◀</span>
-                      <span title="Mover para frente" onClick={() => moverTarefa(tarefa.id, 1)}>▶</span>
+                      <span title="Editar" onClick={() => editarTarefa(tarefa)}>{'\u270F'}</span>
                       <span title="Excluir" onClick={() => excluirTarefa(tarefa.id)}>🗑️</span>
                     </div>
                   </div>
@@ -101,7 +172,9 @@ export default function Kandev({ navigate }) {
 
               {cartoes.length === 0 && (
                 <div className="coluna-vazia">
-                  <div className="vazia-icone">📋</div>
+                  <div className="vazia-icone">
+                    <img src={img_vazio} alt="vazio" />
+                  </div>
                   <p>{EMPTY_MSG[status]}</p>
                 </div>
               )}
@@ -119,34 +192,39 @@ export default function Kandev({ navigate }) {
         </p>
       </footer>
 
-      {modalAberto && (
-        <div className="modal-overlay" onClick={fecharModal}>
+      {/* ====================== MODAL DE TAREFA ====================== */}
+      {modalTarefaAberto && (
+        <div className="modal-overlay" onClick={fecharModalTarefa}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
+              <div className="modal-icon">{editando !== null ? "✏️" : "📝"}</div>
               <h2>{editando !== null ? "Editar Tarefa" : "Nova Tarefa"}</h2>
-              <button className="modal-fechar" onClick={fecharModal}>✕</button>
+              <button className="modal-fechar" onClick={fecharModalTarefa}>✕</button>
             </div>
+
             <form onSubmit={salvarTarefa}>
               <div className="form-grupo">
-                <label htmlFor="titulo">Título</label>
+                <label htmlFor="titulo">Título da tarefa</label>
                 <input
                   type="text"
                   id="titulo"
-                  placeholder="Nome da tarefa"
+                  placeholder="Ex: Finalizar design da homepage"
                   required
                   value={novaTarefa.titulo}
                   onChange={(e) => setNovaTarefa({ ...novaTarefa, titulo: e.target.value })}
                 />
               </div>
+
               <div className="form-grupo">
                 <label htmlFor="descricao">Descrição</label>
                 <textarea
                   id="descricao"
-                  placeholder="Descrição opcional"
+                  placeholder="Detalhes adicionais..."
                   value={novaTarefa.descricao}
                   onChange={(e) => setNovaTarefa({ ...novaTarefa, descricao: e.target.value })}
                 />
               </div>
+
               <div className="form-grupo">
                 <label htmlFor="status">Coluna</label>
                 <select
@@ -159,11 +237,52 @@ export default function Kandev({ navigate }) {
                   ))}
                 </select>
               </div>
+
               <div className="modal-acoes">
-                <button type="button" className="btn-cancelar" onClick={fecharModal}>Cancelar</button>
-                <button type="submit" className="btn-salvar">
-                  {editando !== null ? "Salvar" : "Criar Tarefa"}
+                <button type="button" className="btn-cancelar" onClick={fecharModalTarefa}>
+                  Cancelar
                 </button>
+                <button type="submit" className="btn-salvar">
+                  {editando !== null ? "Salvar Alterações" : "Criar Tarefa"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      
+      {modalPerfilAberto && (
+        <div className="modal-overlay" onClick={() => setModalPerfilAberto(false)}>
+          <div className="modal perfil-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Meu Perfil</h2>
+              <button className="modal-fechar" onClick={() => setModalPerfilAberto(false)}>✕</button>
+            </div>
+
+            <form onSubmit={salvarPerfil}>
+              <div className="form-grupo">
+                <label>Nome Completo</label>
+                <input
+                  type="text"
+                  value={perfil.nome}
+                  onChange={(e) => setPerfil({ ...perfil, nome: e.target.value })}
+                />
+              </div>
+
+              <div className="form-grupo">
+                <label>Email</label>
+                <input
+                  type="email"
+                  value={perfil.email}
+                  onChange={(e) => setPerfil({ ...perfil, email: e.target.value })}
+                />
+              </div>
+
+              <div className="modal-acoes">
+                <button type="button" className="btn-cancelar" onClick={() => setModalPerfilAberto(false)}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-salvar">Salvar Alterações</button>
               </div>
             </form>
           </div>

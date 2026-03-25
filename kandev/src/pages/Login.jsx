@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/login.css";
+import "../styles/base.css";
 
 export default function Login({ navigate }) {
   const [form, setForm] = useState({ email: "", senha: "" });
@@ -32,7 +33,6 @@ export default function Login({ navigate }) {
               id="email"
               placeholder="Digite seu email"
               autoComplete="off"
-              required
               value={form.email}
               onChange={handleChange}
             />
@@ -45,7 +45,6 @@ export default function Login({ navigate }) {
                 type="password"
                 id="senha"
                 placeholder="Digite sua senha"
-                required
                 value={form.senha}
                 onChange={handleChange}
               />

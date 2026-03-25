@@ -18,7 +18,7 @@ export default function EsqueceSenha({ navigate }) {
       alert("As senhas não coincidem!");
       return;
     }
-    // Lógica de redefinição de senha aqui
+    // Lógica de redefinição falta implementar ainda
     navigate("login");
   };
 
