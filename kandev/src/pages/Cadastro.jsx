@@ -26,7 +26,7 @@ export default function Cadastro({ navigate }) {
   return (
     <div className="page-cadastro">
       <div className="container">
-        <div className="logo">
+        <div className="logo" onClick={() => navigate("home")}>
           <h1>KanDev</h1>
         </div>
 
@@ -36,7 +36,7 @@ export default function Cadastro({ navigate }) {
             <input
               type="text"
               id="nome"
-              placeholder="Digite seu nome"
+              placeholder={"\u{1F464} Digite seu nome"}
               required
               value={form.nome}
               onChange={handleChange}
@@ -48,7 +48,7 @@ export default function Cadastro({ navigate }) {
             <input
               type="email"
               id="email"
-              placeholder="Digite seu email"
+              placeholder={"\u{1F582} Digite seu email"}
               required
               value={form.email}
               onChange={handleChange}
@@ -60,7 +60,7 @@ export default function Cadastro({ navigate }) {
             <input
               type="password"
               id="senha"
-              placeholder="Digite uma senha"
+              placeholder={"\u{1F512} Digite sua senha"}
               required
               value={form.senha}
               onChange={handleChange}
@@ -72,7 +72,7 @@ export default function Cadastro({ navigate }) {
             <input
               type="password"
               id="confirmarSenha"
-              placeholder="Digite novamente a senha"
+              placeholder={"\u{1F512} Digite sua nova senha novamente"}
               required
               value={form.confirmarSenha}
               onChange={handleChange}

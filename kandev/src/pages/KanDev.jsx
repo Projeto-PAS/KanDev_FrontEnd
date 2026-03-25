@@ -19,12 +19,12 @@ let nextId = 1;
 
 export default function Kandev() {
   const [tarefas, setTarefas] = useState([]);
-
   const [modalTarefaAberto, setModalTarefaAberto] = useState(false);
   const [novaTarefa, setNovaTarefa] = useState({ titulo: "", descricao: "", status: "começar" });
   const [editando, setEditando] = useState(null);
   const [modalPerfilAberto, setModalPerfilAberto] = useState(false);
   const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
+  const [temaEscuro, setTemaEscuro] = useState(false);
 
   const [perfil, setPerfil] = useState({
     nome: "Cleber Marcolino",
@@ -94,12 +94,10 @@ export default function Kandev() {
   };
 
   return (
-    <div className="page-kandev">
+    <div className={`page-kandev ${temaEscuro ? "tema-escuro" : ""}`}>
       <header>
         <div 
-          className="logo" 
-          onClick={() => window.location.reload()}
-          title="Recarregar página"
+          className="logo"
         >
           KanDev
         </div>
@@ -120,13 +118,17 @@ export default function Kandev() {
             {dropdownPerfilAberto && (
               <div className="perfil-dropdown">
                 <div className="dropdown-item" onClick={abrirModalPerfil}>
-                  Ver / Editar Perfil
+                   {"\u{02699} Editar Perfil"}
                 </div>
-                <div className="dropdown-item">Configurações</div>
-                <div className="dropdown-item">Alternar Tema</div>
+                <div className="dropdown-item" onClick={() => {
+                  setTemaEscuro(!temaEscuro);
+                  setDropdownPerfilAberto(false);
+                }}>
+                  {temaEscuro ? "\u{1F31E} Tema Claro" : "\u{1F313} Tema Escuro"}
+                </div>
                 <div className="dropdown-separator"></div>
                 <div className="dropdown-item logout" onClick={() => window.location.reload()}>
-                  Sair
+                  {"\u{1F6AA} Sair"}
                 </div>
               </div>
             )}
@@ -192,7 +194,6 @@ export default function Kandev() {
         </p>
       </footer>
 
-      {/* ====================== MODAL DE TAREFA ====================== */}
       {modalTarefaAberto && (
         <div className="modal-overlay" onClick={fecharModalTarefa}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -208,7 +209,7 @@ export default function Kandev() {
                 <input
                   type="text"
                   id="titulo"
-                  placeholder="Ex: Finalizar design da homepage"
+                  placeholder="Título de sua anotação"
                   required
                   value={novaTarefa.titulo}
                   onChange={(e) => setNovaTarefa({ ...novaTarefa, titulo: e.target.value })}
@@ -225,6 +226,7 @@ export default function Kandev() {
                 />
               </div>
 
+              {editando !== null && (
               <div className="form-grupo">
                 <label htmlFor="status">Coluna</label>
                 <select
@@ -237,6 +239,7 @@ export default function Kandev() {
                   ))}
                 </select>
               </div>
+            )}
 
               <div className="modal-acoes">
                 <button type="button" className="btn-cancelar" onClick={fecharModalTarefa}>
@@ -256,7 +259,7 @@ export default function Kandev() {
           <div className="modal perfil-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Meu Perfil</h2>
-              <button className="modal-fechar" onClick={() => setModalPerfilAberto(false)}>✕</button>
+              <button className="modal-fechar" onClick={() => setModalPerfilAberto(false)}>x</button>
             </div>
 
             <form onSubmit={salvarPerfil}>
@@ -288,6 +291,8 @@ export default function Kandev() {
           </div>
         </div>
       )}
+
+      
     </div>
   );
 }

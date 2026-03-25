@@ -51,21 +51,20 @@
 
 .page-cadastro .form-grupo label {
   display: block;
-  margin-bottom: 0.7rem;
-  color: #94a3b8;
-  font-size: 1.20rem;
-  font-weight: 400;
+  margin-bottom: 1.0rem;
+  color: rgba(134, 58, 134, 0.918);
+  font-size: 0.90rem;
+  font-weight: 600;
 }
 
-.page-cadastro input {
+.page-cadastro .form-grupo input {
   width: 100%;
-  margin-bottom: 10px;
-  padding: 1rem 1.1rem;
-  background-color: rgba(236, 238, 238, 0.445);
+  padding: 0.9rem 1.1rem;
+  background-color: rgba(179, 178, 178, 0.144);
   border: 1px solid rgba(120, 80, 220, 0.3);
   border-radius: 8px;
   color: #1f2937;
-  font-size: 1.10rem;
+  font-size: 0.95rem;
   transition: all 0.25s ease;
 }
 
@@ -75,7 +74,7 @@
   box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
 }
 
-.page-cadastro input::placeholder {
+.page-cadastro  input::placeholder {
   color: rgba(128, 128, 128, 0.37);
 }
 

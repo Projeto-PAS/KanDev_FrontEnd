@@ -8,6 +8,70 @@
   color: #1e2937;
 }
 
+.tema-escuro {
+  --bg: #0f1117;
+  --bg-coluna: #1a1d27;
+  --bg-cartao: #22263a;
+  --bg-header: #13151f;
+  --texto: #e8eaf6;
+  --texto-secundario: #9099b7;
+  --borda: #2e3250;
+  --sombra: rgba(0, 0, 0, 0.4);
+}
+
+.tema-escuro header {
+  background-color: var(--bg-header);
+  border-bottom: 1px solid var(--borda);
+}
+
+.tema-escuro main {
+  background-color: var(--bg);
+}
+
+.tema-escuro .coluna {
+  background-color: var(--bg-coluna);
+  border: 1px solid var(--borda);
+}
+
+.tema-escuro .cartao-tarefa {
+  background-color: var(--bg-cartao);
+  border: 1px solid var(--borda);
+  color: var(--texto);
+}
+
+.tema-escuro .coluna-header span {
+  color: var(--texto);
+}
+
+.tema-escuro .modal {
+  background-color: var(--bg-coluna);
+  color: var(--texto);
+}
+
+.tema-escuro .modal input,
+.tema-escuro .modal textarea,
+.tema-escuro .modal select {
+  background-color: var(--bg-cartao);
+  color: var(--texto);
+  border: 1px solid var(--borda);
+}
+
+.tema-escuro .perfil-dropdown {
+  background-color: var(--bg-coluna);
+  border: 1px solid var(--borda);
+  color: var(--texto);
+}
+
+.tema-escuro .dropdown-item:hover {
+  background-color: var(--bg-cartao);
+}
+
+.tema-escuro footer {
+  background-color: var(--bg-header);
+  color: var(--texto-secundario);
+  border-top: 1px solid var(--borda);
+}
+
 header {
   height: 64px;
   background: white;
