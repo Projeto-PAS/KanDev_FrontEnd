@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import "../styles/kandev.css";
 import img_vazio from "../assets/img_vazio.jpg";
 import icon_profile from "../assets/icon_profile.png";
@@ -25,6 +25,9 @@ export default function Kandev() {
   const [modalPerfilAberto, setModalPerfilAberto] = useState(false);
   const [dropdownPerfilAberto, setDropdownPerfilAberto] = useState(false);
   const [temaEscuro, setTemaEscuro] = useState(false);
+  const [fotoPerfil, setFotoPerfil] = useState(null);
+  const [fotoPreview, setFotoPreview] = useState(null);
+  const inputFotoRef = useRef(null);
 
   const [perfil, setPerfil] = useState({
     nome: "Cleber Marcolino",
@@ -64,14 +67,37 @@ export default function Kandev() {
   };
 
   const abrirModalPerfil = () => {
+    setFotoPreview(fotoPerfil);
     setDropdownPerfilAberto(false);
     setModalPerfilAberto(true);
   };
 
+  const handleFotoChange = (e) => {
+    const arquivo = e.target.files[0];
+    if (!arquivo) return;
+
+    if (!arquivo.type.startsWith("image/")) {
+      alert("Por favor, selecione uma imagem válida.");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFotoPreview(reader.result);
+    };
+    reader.readAsDataURL(arquivo);
+  };
+
   const salvarPerfil = (e) => {
     e.preventDefault();
+    setFotoPerfil(fotoPreview); 
     setModalPerfilAberto(false);
     alert("\u2705 Perfil atualizado com sucesso!");
+  };
+
+  const fecharModalPerfil = () => {
+    setFotoPreview(null);
+    setModalPerfilAberto(false);
   };
 
   const handleDragStart = (e, id) => {
@@ -96,11 +122,7 @@ export default function Kandev() {
   return (
     <div className={`page-kandev ${temaEscuro ? "tema-escuro" : ""}`}>
       <header>
-        <div 
-          className="logo"
-        >
-          KanDev
-        </div>
+        <div className="logo">KanDev</div>
 
         <div className="header-acoes">
           <button className="btn-novo" onClick={abrirModalTarefa}>
@@ -108,17 +130,22 @@ export default function Kandev() {
           </button>
 
           <div className="perfil-container">
-            <div 
+            <div
               className="perfil-icone"
               onClick={() => setDropdownPerfilAberto(!dropdownPerfilAberto)}
             >
-              <img src={icon_profile} alt="Perfil" />
+              
+              <img
+                src={fotoPerfil || icon_profile}
+                alt="Perfil"
+                style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "50%" }}
+              />
             </div>
 
             {dropdownPerfilAberto && (
               <div className="perfil-dropdown">
                 <div className="dropdown-item" onClick={abrirModalPerfil}>
-                   {"\u{02699} Editar Perfil"}
+                  {"\u{02699} Editar Perfil"}
                 </div>
                 <div className="dropdown-item" onClick={() => {
                   setTemaEscuro(!temaEscuro);
@@ -227,19 +254,19 @@ export default function Kandev() {
               </div>
 
               {editando !== null && (
-              <div className="form-grupo">
-                <label htmlFor="status">Coluna</label>
-                <select
-                  id="status"
-                  value={novaTarefa.status}
-                  onChange={(e) => setNovaTarefa({ ...novaTarefa, status: e.target.value })}
-                >
-                  {STATUS.map((s) => (
-                    <option key={s} value={s}>{LABELS[s]}</option>
-                  ))}
-                </select>
-              </div>
-            )}
+                <div className="form-grupo">
+                  <label htmlFor="status">Coluna</label>
+                  <select
+                    id="status"
+                    value={novaTarefa.status}
+                    onChange={(e) => setNovaTarefa({ ...novaTarefa, status: e.target.value })}
+                  >
+                    {STATUS.map((s) => (
+                      <option key={s} value={s}>{LABELS[s]}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
 
               <div className="modal-acoes">
                 <button type="button" className="btn-cancelar" onClick={fecharModalTarefa}>
@@ -253,16 +280,36 @@ export default function Kandev() {
           </div>
         </div>
       )}
-      
+
       {modalPerfilAberto && (
-        <div className="modal-overlay" onClick={() => setModalPerfilAberto(false)}>
+        <div className="modal-overlay" onClick={fecharModalPerfil}>
           <div className="modal perfil-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h2>Meu Perfil</h2>
-              <button className="modal-fechar" onClick={() => setModalPerfilAberto(false)}>x</button>
+              <button className="modal-fechar" onClick={fecharModalPerfil}>✕</button>
             </div>
 
             <form onSubmit={salvarPerfil}>
+
+              <div className="foto-perfil-area">
+                <div className="foto-perfil-preview" onClick={() => inputFotoRef.current.click()}>
+                  <img
+                    src={fotoPreview || icon_profile}
+                    alt="Foto de perfil"
+                  />
+                  <div className="foto-perfil-overlay">
+                    <span>{"\u{1F4F7} Alterar foto"}</span>
+                  </div>
+                </div>
+                <input
+                  type="file"
+                  accept="image/*"
+                  ref={inputFotoRef}
+                  style={{ display: "none" }}
+                  onChange={handleFotoChange}
+                />
+              </div>
+
               <div className="form-grupo">
                 <label>Nome Completo</label>
                 <input
@@ -282,7 +329,7 @@ export default function Kandev() {
               </div>
 
               <div className="modal-acoes">
-                <button type="button" className="btn-cancelar" onClick={() => setModalPerfilAberto(false)}>
+                <button type="button" className="btn-cancelar" onClick={fecharModalPerfil}>
                   Cancelar
                 </button>
                 <button type="submit" className="btn-salvar">Salvar Alterações</button>
@@ -291,8 +338,6 @@ export default function Kandev() {
           </div>
         </div>
       )}
-
-      
     </div>
   );
 }
